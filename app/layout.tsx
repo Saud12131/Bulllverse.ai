@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
-
+import { Auth0Provider } from "@auth0/nextjs-auth0";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,7 +30,9 @@ export default function RootLayout({
       >
         <Navbar/>
         <main className="pt-16"> {/* Add padding-top to account for fixed navbar */}
+          <Auth0Provider>
           {children}
+        </Auth0Provider>
         </main>
       </body>
     </html>

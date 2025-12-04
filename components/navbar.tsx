@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
+import { useUser } from '@auth0/nextjs-auth0';
 export default function Navbar() {
+  const {user , isLoading} = useUser()
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -40,6 +41,7 @@ export default function Navbar() {
     }
   };
 
+    
   return (
     <nav className="w-full fixed top-0 z-50 bg-black border-b border-white/5 ">
       <div className="max-w-7xl mx-auto flex items-center px-6 py-3">
@@ -84,10 +86,29 @@ export default function Navbar() {
         {/* Right Buttons */}
         <div className="flex items-center gap-5">
           <button className="text-gray-300 hover:text-white transition">Docs</button>
-          <button className="text-gray-300 hover:text-white transition">Login</button>
-          <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-            Sign Up
-          </button>
+          {
+            user && user.name ? (
+              <button 
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition" 
+                onClick={() => router.push("/profile")}
+              >
+                {user.name}
+              </button>
+            ) : (
+              <button 
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition" 
+                onClick={() => router.push("/auth/login")}
+              >
+                Login
+              </button>
+            )
+          }
+            <button 
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition" 
+                onClick={() => router.push("/auth/logout")}
+              >
+                Logout
+              </button>
         </div>
       </div>
     </nav>

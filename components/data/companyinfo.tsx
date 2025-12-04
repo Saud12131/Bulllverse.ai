@@ -1,16 +1,7 @@
 import { getCompanyInfo, type CompanyInfo } from "@/services/companyinfo";
-
-interface InfoItemProps {
-  label: string;
-  value: string | null | undefined;
-}
-
-const InfoItem = ({ label, value }: InfoItemProps) => (
-  <div className="flex items-baseline gap-2">
-    <span className="text-gray-400 text-sm font-medium w-20">{label}:</span>
-    <span className="text-white">{value || 'N/A'}</span>
-  </div>
-);
+import LivePrice from "../LivePrice";
+import CompanyInfoItems from "../compnayinfoitems";
+import ProfitLoss from "../ProfitLoss";
 
 export default async function CompanyInfo({ symbol }: { symbol: string }) {
     const companyInfo = await getCompanyInfo(symbol);
@@ -41,17 +32,27 @@ export default async function CompanyInfo({ symbol }: { symbol: string }) {
                 {/* Company Info */}
                 <div className="flex-1">
                     <div className="mb-2">
-                        <h2 className="text-xl font-bold text-white">{companyInfo.name}</h2>
-                        <span className="text-blue-400 font-mono text-sm">{symbol.toUpperCase()}</span>
+                        <div className="flex items-baseline gap-4 flex-wrap">
+                            <h2 className="text-xl font-bold text-white">{companyInfo.name}</h2>
+                            <span className="text-blue-400 font-mono text-sm">{symbol.toUpperCase()}</span>
+                            <div className="text-xl font-bold text-white ml-2">
+                                <LivePrice symbol={symbol}/>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                        <InfoItem label="ISIN" value={companyInfo.isin} />
-                        <InfoItem label="Exchange" value={companyInfo.exchange} />
-                        <InfoItem label="Sector" value={companyInfo.sector} />
-                        <InfoItem label="Industry" value={companyInfo.industry} />
+                    <div>
+                    <CompanyInfoItems companyInfo={companyInfo}/>
                     </div>
                 </div>
+            </div>
+            
+            {/* Profit & Loss Card */}
+            <div className="mt-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                {/* <h3 className="text-lg font-semibold text-white mb-4">Financial Performance</h3> */}
+                {/* <div className="overflow-x-auto"> */}
+                    {/* <ProfitLoss symbol={symbol}/> */}
+                {/* </div> */}
+                
             </div>
         </div>
     );
